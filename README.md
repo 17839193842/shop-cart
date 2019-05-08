@@ -36,7 +36,7 @@
   在入口文件main.js中引入axios,并将其挂在全局Vue方法下:
   
   `
-	// main.js
-	import axios from 'axios'
-	Vue.prototype.$http = axios
+		// main.js
+		import axios from 'axios'
+		Vue.prototype.$http = axios
   `

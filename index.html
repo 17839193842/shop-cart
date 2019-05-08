@@ -3,7 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>simple</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui, maximum-scale=1.0, minimum-scale=1.0">
+	  <link rel="stylesheet" href="static/font/css/iconfont.css" type="text/css">	  
+	  <script>
+	  	//js动态修改根元素字体大小  默认UI图为640px
+			/*pageFit start*/
+			function pageFit(doc,win,maxwidth,minwidth,font) {
+			    var docEl = doc.documentElement,
+			        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+			        recalc = function () {
+			            var clientWidth = docEl.clientWidth;
+			            if (!clientWidth) return;
+			            //最大最小width范围内，自由缩放
+			            if(clientWidth>=minwidth&&clientWidth<=maxwidth){
+			                docEl.style.fontSize = font * (clientWidth / maxwidth) + 'px';
+			            }
+			            //超出最大宽度，误差校准
+			            else if(clientWidth>maxwidth){
+			                docEl.style.fontSize = font+'px';
+			            }
+			            //小于最小宽度，误差校准
+			            else if(clientWidth<minwidth){
+			                docEl.style.fontSize = font * (minwidth / maxwidth) + 'px';
+			            }
+			        };
+			    if (!doc.addEventListener) return;
+			    win.addEventListener(resizeEvt, recalc, false);
+			    doc.addEventListener('DOMContentLoaded', recalc, false);
+			}
+			pageFit(document,window,640,320,40);    //最大宽度maxwidth，最小宽度minwidth，html下的font-size
+			/*pageFit end*/
+	  </script>
+    <title>vue购物车</title>
   </head>
   <body>
     <div id="app"></div>
