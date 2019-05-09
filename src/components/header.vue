@@ -1,5 +1,5 @@
 <template>
-	<div class="home">
+	<div>
 		<!--遮罩层-->
 		<div class="pagecity" v-show="showNav" @click="showModal">	
 		</div>
@@ -16,46 +16,31 @@
 			</div>
 		</header>
 		<!--左侧导航-->
-		<div class="left-side" :class="{'show':showNav}">
-			<ul>
-				<li v-for="(item,index) in navList" :key="index" @click="updateHeader(item.name)">
-					<router-link :to="item.type">
-						<span class="iconfont" :class="'icon-'+item.icon"></span>
-						{{item.name}}
-					</router-link>
-				</li>
-			</ul>
-		</div>
+		<v-menu :showNav="showNav"></v-menu>
 	</div>
 </template>
 
 <script>
-	export default {
-		name:'Home',
+	import vMenu from '../components/menu.vue'
+	export default{
+	name:'Header',
 		data(){
 			return {
 //				showNav:false,
 			};
 		},
+		components:{
+			'v-menu':vMenu
+		},
 		computed:{
 			showNav(){
 				return this.$store.state.showNav;
-			},
-			navList(){
-				return this.$store.state.navList;
 			},
 			headerTitle(){
 				return this.$store.state.headerTitle
 			}
 		},
 		methods:{
-			getData(){
-				this.$http.get('../../static/data/index.json').then((response) => {
-					console.log(response)
-				},(error)=>{
-					console.log(error)
-				})
-			},
 			showModal(){
 				return this.$store.dispatch('updateShowNav');
 			},
@@ -64,14 +49,25 @@
 			}
 		},
 		created(){
-			this.getData();
+			
 		}
-	}
+}
 	
 </script>
 
 <style lang="scss" scoped="scoped">
-	header{
+.pagecity{
+		position: fixed;
+	    top: 0;
+	    right: 0;
+	    bottom: 0;
+	    left: 0;
+	    background: rgba(0,0,0,.4);
+	    z-index: 800;
+	    width:100%;
+	    height:100%;
+	}
+header{
 		width:100%;
 		height:50px;
 		position:fixed;
@@ -104,49 +100,4 @@
 		}
 	}
 	header.show{ transform:translateX(180px);}
-	.left-side{
-		width:180px;
-		height:100%;
-		position:fixed;
-		left:-180px;
-		transition:all .5s ease;
-		-webkit-transition:all .5s ease;
-		z-index:999;
-		background:#383838;
-		overflow:hidden;
-		ul{
-			width:100%;
-			li{
-				line-height:50px;
-				border-bottom:1px solid #555;
-				padding-left:0.5rem;
-				font-size:14px;
-				color:#fff;
-				text-align: left;
-				span{
-					margin-right:0.3rem;
-				}
-				a{
-					color:#fff;
-				}
-			}
-		}
-		
-		
-  }
-	.left-side.show{
-	   transform:translateX(180px);
-	}
-
-	.pagecity{
-		position: fixed;
-	    top: 0;
-	    right: 0;
-	    bottom: 0;
-	    left: 0;
-	    background: rgba(0,0,0,.4);
-	    z-index: 800;
-	    width:100%;
-	    height:100%;
-	}
 </style>

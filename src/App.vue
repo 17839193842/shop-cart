@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-  
+    <v-header></v-header>
     <router-view/>
   </div>
 </template>
 
 <script>
 	  import './assets/css/reset.scss'
-export default {
-  name: 'App'
-}
+	  import Header from './components/header.vue'
+		export default {
+		  name: 'App',
+		  components:{
+		  	'v-header':Header
+		  }
+		}
 </script>
 
 <style lang="scss">
