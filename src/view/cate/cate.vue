@@ -1,28 +1,75 @@
 <template>
-	<div style="padding-top:50px;">
-		分类页
-		<p>
-			ceshi cedvf dsbg
-			xchjerndbsgb
-		</p>
-		<h4>
-			3wwerebtgssbgrb
-		</h4>
-		<h5>112345tygfd</h5>
-		<p>测试时测定的看看导出女款v 到了吗方面</p>
-	</div>
+  <div class="s-cate">
+    <div class="cate-nav">
+      <div class="nav-out">
+        <div class="nav">
+          <a class="nav-a" href="javascript:;"
+              v-for="(type, index) in types"
+              :class="{'nav-a-act': index==nowIndex}"
+              @click="clickType(type.type_now, index)">
+              {{type.type_name}}
+          </a>
+          <!-- <a class="nav-a" href="javascript:;" @click="clickType('type_man')">男装</a>
+          <a class="nav-a" href="javascript:;" @click="clickType('type_girl')">女装</a>
+          <a class="nav-a" href="javascript:;" @click="clickType('type_man')">男装</a>
+          <a class="nav-a" href="javascript:;" @click="clickType('type_man')">男装</a>
+          <a class="nav-a" href="javascript:;" @click="clickType('type_girl')">女装</a>
+          <a class="nav-a" href="javascript:;" @click="clickType('type_girl')">女装</a>
+          <a class="nav-a" href="javascript:;" @click="clickType('type_man')">男装</a>
+          <a class="nav-a" href="javascript:;" @click="clickType('type_man')">男装</a>
+          <a class="nav-a" href="javascript:;" @click="clickType('type_man')">男装</a> -->
+        </div>
+      </div>
+    </div>
+    <div class="cate-cont">
+      <ul>
+        <li v-for="brand in allBrand" v-if="nowType==brand.type || nowType=='type_all'">
+          <router-link to="/detail" class="cont-li" href="javascript:;">
+            <img class="pic" :src="brand.brand_pic_url"/>
+            <span class="name">{{brand.brand_name}}</span>
+            <span class="price">{{brand.brand_price}}</span>
+          </router-link>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
-	export default{
-		name:'Cate',
-		data(){
-			return {
-				
-			}
-		}
-	}
+  import '../../assets/css/cate.scss'
+  export default {
+    data () {
+      return {
+        nowType: 'type_all',
+        nowIndex: 0,
+        types: {},
+        dataCate: {},
+        allBrand: {}
+      }
+    },
+    created () {
+      this.$store.dispatch('updateHeader', '分类')
+      this.getDataCate()
+    },
+    methods: {
+      getDataCate () {
+        this.$http.get('../../static/data/cate.json').then((response) => {
+          this.dataCate = response.data
+          this.types = this.dataCate.data.types
+          this.allBrand = this.dataCate.data.allBrand
+        }, (response) => {
+          // error
+        })
+      },
+      clickType (type, index) {
+        this.nowType = type
+        this.nowIndex = index
+      }
+    }
+  }
 </script>
 
-<style lang="scss" scoped="scoped">
+<style lang="scss" scope>
+  
 </style>
+

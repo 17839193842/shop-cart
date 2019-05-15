@@ -1,152 +1,105 @@
 <template>
-	<div class="home">
-		<!--遮罩层-->
-		<div class="pagecity" v-show="showNav" @click="showModal">	
-		</div>
-		<!--头部-->
-		<header :class="{'show':showNav}">
-			<div class="header">
-			  <div class="pull-left">
-			  	 <span class="iconfont icon-39" @click="showModal"></span>
-			  </div>
-			  <h3>{{headerTitle}}</h3>
-			  <div class="pull-right">
-			  	<a href="">后退</a>
-			  </div>
-			</div>
-		</header>
-		<!--左侧导航-->
-		<div class="left-side" :class="{'show':showNav}">
-			<ul>
-				<li v-for="(item,index) in navList" :key="index" @click="updateHeader(item.name)">
-					<router-link :to="item.type">
-						<span class="iconfont" :class="'icon-'+item.icon"></span>
-						{{item.name}}
-					</router-link>
-				</li>
-			</ul>
-		</div>
-	</div>
+  <div class="s-index">
+    
+    <div class="cont">
+      <p class="cont-head">
+        <span class="head-title">特卖</span>
+        <!-- <a class="head-right" >更多></a> -->
+        <router-link to="/cate" class="head-right">更多 ></router-link>
+      </p>
+      <div class="cont-main cont-temai">
+        <router-link to="/detail" class="cont-one" href="javascript:;" v-for="brand in temai" :key="brand.id">
+          <span class="name">{{brand.brand_name}}</span>
+          <span class="price">￥{{brand.brand_price}}</span>
+          <img class="pic" :src="brand.brand_pic_url"/>
+        </router-link>
+      </div>
+    </div>
+
+    <div class="cont">
+      <p class="cont-head">
+        <span class="head-title">热销</span>
+        <!-- <a class="head-right" >更多></a> -->
+        <router-link to="/cate" class="head-right">更多 ></router-link>
+      </p>
+      <div class="cont-main cont-rexiao">
+        <router-link to="/detail" class="cont-left" href="javascript:;"
+            v-for="(brand, key, index) in rexiao"
+            v-if="key==0"
+            :key="brand.id">
+          <span class="name">{{brand.brand_name}}</span>
+          <span class="desc">{{brand.brand_desc}}</span>
+          <img class="pic" :src="brand.brand_pic_url"/>
+        </router-link>
+        <div class="cont-right">
+          <router-link to="/detail" class="cont-right-one" href="javascript:;"
+              v-for="(brand, key, index) in rexiao"
+              v-if="key>=1"
+              :key="brand.id">
+            <p class="text">
+              <span class="name">{{brand.brand_name}}</span>
+              <span class="desc">{{brand.brand_desc}}</span>
+            </p>
+            <img class="pic" :src="brand.brand_pic_url"/>
+          </router-link>
+        </div>
+      </div>
+    </div>
+
+    <div class="cont">
+      <p class="cont-head">
+        <span class="head-title">精品</span>
+        <!-- <a class="head-right" >更多></a> -->
+        <router-link to="/cate" class="head-right">更多 ></router-link>
+      </p>
+      <div class="cont-main cont-jingpin">
+        <ul>
+          <li v-for="brand in jingpin">
+            <router-link to="detail" class="cont-li" href="javascript:;">
+              <img class="pic" :src="brand.brand_pic_url"/>
+              <span class="name">{{brand.brand_name}}</span>
+              <span class="price">￥{{brand.brand_price}}</span>
+            </router-link>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- <div class="bot">bot</div> -->
+  </div>
 </template>
 
 <script>
-	export default {
-		name:'Home',
-		data(){
-			return {
-//				showNav:false,
-			};
-		},
-		computed:{
-			showNav(){
-				return this.$store.state.showNav;
-			},
-			navList(){
-				return this.$store.state.navList;
-			},
-			headerTitle(){
-				return this.$store.state.headerTitle
-			}
-		},
-		methods:{
-			getData(){
-				this.$http.get('../../static/data/index.json').then((response) => {
-					console.log(response)
-				},(error)=>{
-					console.log(error)
-				})
-			},
-			showModal(){
-				return this.$store.dispatch('updateShowNav');
-			},
-			updateHeader(name){
-				return this.$store.dispatch('updateHeader',name);
-			}
-		},
-		created(){
-			this.getData();
-		}
-	}
-	
+  import '../../assets/css/index.scss'
+  export default {
+    data () {
+      return {
+        dataIndex: {},
+        temai: {},
+        rexiao: {},
+        jingpin: {}
+      }
+    },
+    created () {
+      this.$store.dispatch('updateHeader', '首页')
+      this.getDataIndex()
+    },
+    methods: {
+     
+      getDataIndex () {
+        this.$http.get('../../static/data/index.json').then((response) => {
+          this.dataIndex = response.data
+          this.temai = this.dataIndex.data.temai
+          this.rexiao = this.dataIndex.data.rexiao
+          this.jingpin = this.dataIndex.data.jingpin
+        }, (response) => {
+          // error
+        })
+      }
+    }
+  }
 </script>
 
-<style lang="scss" scoped="scoped">
-	header{
-		width:100%;
-		height:50px;
-		position:fixed;
-		top:0;
-		left:0;
-		z-index:99;
-		background:#03A9F4;
-		transition:all .5s ease;
-		-webkit-transition:all .5s ease;
-		color:#fff;
-		.header{
-			width:100%;
-			height:100%;
-			display:flex;
-			flex-direction: row;
-		    justify-content: space-around;
-		    align-items: center;
-		    .pull-left{
-		    	padding:0 0.5rem;
-		    }
-		    h3{
-		    	flex:1;
-		    }
-		    .pull-right{
-		    	padding:0 0.5rem;
-		    	a{
-		    		color:#fff;
-		    	}
-		    }
-		}
-	}
-	header.show{ transform:translateX(180px);}
-	.left-side{
-		width:180px;
-		height:100%;
-		position:fixed;
-		left:-180px;
-		transition:all .5s ease;
-		-webkit-transition:all .5s ease;
-		z-index:999;
-		background:#383838;
-		overflow:hidden;
-		ul{
-			width:100%;
-			li{
-				line-height:50px;
-				border-bottom:1px solid #555;
-				padding-left:0.5rem;
-				font-size:14px;
-				color:#fff;
-				text-align: left;
-				span{
-					margin-right:0.3rem;
-				}
-				a{
-					color:#fff;
-				}
-			}
-		}
-		
-		
-  }
-	.left-side.show{
-	   transform:translateX(180px);
-	}
-
-	.pagecity{
-		position: fixed;
-	    top: 0;
-	    right: 0;
-	    bottom: 0;
-	    left: 0;
-	    background: rgba(0,0,0,.4);
-	    z-index: 800;
-	    width:100%;
-	    height:100%;
-	}
+<style lang="scss" scope>
+  
 </style>

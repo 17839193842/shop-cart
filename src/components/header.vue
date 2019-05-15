@@ -21,7 +21,8 @@
 </template>
 
 <script>
-	import vMenu from '../components/menu.vue'
+//	import vMenu from '../components/menu.vue'
+	import vMenu from './menu.vue'
 	export default{
 	name:'Header',
 		data(){
